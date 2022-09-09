@@ -12,8 +12,8 @@ if not BASE_DIR:
 JOB1_PORT = 8081
 JOB2_PORT = 8082
 
-RAW_DIR = os.path.join(BASE_DIR, "raw", "sales", "2022-08-09")
-STG_DIR = os.path.join(BASE_DIR, "stg", "sales", "2022-08-09")
+RAW_DIR = os.path.join(BASE_DIR, "raw", "sales")  # , "2022-08-09"
+STG_DIR = os.path.join(BASE_DIR, "stg", "sales")  # , "2022-08-09"
 
 
 def run_job1():
@@ -25,7 +25,8 @@ def run_job1():
             "raw_dir": RAW_DIR
         }
     )
-    assert resp.status_code == 201
+
+    assert resp.status_code == 200
     print("job1 completed!")
 
 
@@ -38,7 +39,7 @@ def run_job2():
             "stg_dir": STG_DIR
         }
     )
-    assert resp.status_code == 201
+    assert resp.status_code == 200
     print("job2 completed!")
 
 
