@@ -14,7 +14,7 @@ FROM	public.film_category fc
 		JOIN public.film f ON fc.film_id = f.film_id 
 		JOIN public.category c ON fc.category_id = c.category_id 
 GROUP BY c."name" 		
-ORDER BY cnt desc; 
+ORDER BY cnt DESC; 
 
 
 
