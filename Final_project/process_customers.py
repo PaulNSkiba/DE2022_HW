@@ -46,5 +46,24 @@ transfer_customers_from_raw_to_bronze = BigQueryInsertJobOperator(
     }
 )
 
-transfer_customers_from_raw_to_bronze
+transfer_customers_from_bronze_to_silver = BigQueryInsertJobOperator(
+    task_id='transfer_customers_from_bronze_to_silver',
+    dag=dag,
+    gcp_conn_id='gcloud-airflow-conn',
+    configuration={
+        "query": {
+            "query": "{% include 'sql/transfer_customers_from_bronze_to_silver.sql' %}",
+            "useLegacySql": False,
+        }
+    },
+    params={
+        'dl_bucket': "de2022-paul_skyba_bucket_1",
+        'project_id': "my-project-my-marks"
+    }
+)
+
+
+transfer_customers_from_raw_to_bronze >> transfer_customers_from_bronze_to_silver
+
+
 

@@ -1,5 +1,5 @@
 """
- Process user_profiles in the final project
+ Process sales in the final project
 """
 
 import datetime as dt

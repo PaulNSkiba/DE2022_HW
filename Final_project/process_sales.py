@@ -9,10 +9,10 @@ from airflow.providers.google.cloud.operators.bigquery import BigQueryInsertJobO
 from table_defs.sales_csv import sales_csv
 
 DEFAULT_ARGS = {
-    'depends_on_past' : True,
-    'email_on_failure' : True,
-    'email_on_retry':False,
-    'retries':1,
+    'depends_on_past': True,
+    'email_on_failure': True,
+    'email_on_retry': False,
+    'retries': 1,
     'retry_delay': 10
 }
 
@@ -46,4 +46,21 @@ transfer_sales_from_raw_to_bronze = BigQueryInsertJobOperator(
     }
 )
 
-transfer_sales_from_raw_to_bronze
+transfer_sales_from_bronze_to_silver = BigQueryInsertJobOperator(
+    task_id='transfer_sales_from_bronze_to_silver',
+    dag=dag,
+    gcp_conn_id='gcloud-airflow-conn',
+    configuration={
+        "query": {
+            "query": "{% include 'sql/transfer_sales_from_bronze_to_silver.sql' %}",
+            "useLegacySql": False,
+        }
+    },
+    params={
+        'dl_bucket': "de2022-paul_skyba_bucket_1",
+        'project_id': "my-project-my-marks"
+    }
+)
+
+transfer_sales_from_raw_to_bronze >> transfer_sales_from_bronze_to_silver
+
